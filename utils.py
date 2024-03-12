@@ -111,15 +111,15 @@ def imputa_valor_frecuente(df, columna):
 
 def imputa_edad_media_segun_sexo(df, col, agr):
     """
-    Imputa valores faltantes en la columna 'Edad' utilizando la edad promedio según el género.
+    Imputa valores faltantes en la columna 'edad' utilizando la edad promedio según el género.
 
-    Esta función reemplaza los valores "SD" con NaN en la columna 'Edad', calcula la edad promedio
+    Esta función reemplaza los valores "SD" con NaN en la columna 'edad', calcula la edad promedio
     para cada grupo de género (Femenino y Masculino), imprime los promedios calculados y
-    luego llena los valores faltantes en la columna 'Edad' utilizando el promedio correspondiente
+    luego llena los valores faltantes en la columna 'edad' utilizando el promedio correspondiente
     al género al que pertenece cada fila en el DataFrame.
 
     Parameters:
-        df (pandas.DataFrame): El DataFrame que contiene la columna 'Edad' a ser imputada.
+        df (pandas.DataFrame): El DataFrame que contiene la columna 'edad' a ser imputada.
 
     Returns:
         None
@@ -251,9 +251,9 @@ def cantidad_victimas_mensuales(df, col_mes):
     # Se grafica
     plt.figure(figsize=(7, 7))
     ax = sns.barplot(x=col_mes, y="num_victimas", data=data, hue=col_mes)
-    ax.set_title("Cantidad de víctimas por Mes")
+    ax.set_title("Cantidad de víctimas por mes")
     ax.set_xlabel("Mes")
-    ax.set_ylabel("Cantidad de Accidentes")
+    ax.set_ylabel("Cantidad accidentes")
 
     # Se imprime resumen
     print(f"El mes con menor cantidad de víctimas tiene {data.min()[1]} víctimas")
@@ -269,7 +269,7 @@ def cantidad_victimas_por_dia_semana(df):
 
     Esta función toma un DataFrame que contiene datos de accidentes, convierte la columna 'fecha' a tipo de dato
     datetime si aún no lo es, extrae el día de la semana (0 = lunes, 6 = domingo), mapea el número del día
-    de la semana a su nombre, cuenta la cantidad de accidentes por día de la semana y crea un gráfico de barras
+    de la semana a su nombre, cuenta la cantidad_accidentes por día de la semana y crea un gráfico de barras
     que muestra la cantidad de víctimas para cada día de la semana.
 
     Parameters:
@@ -296,7 +296,7 @@ def cantidad_victimas_por_dia_semana(df):
     ]
     df["nombre_dia"] = df["dia_semana"].map(lambda x: dias_semana[x])
 
-    # Se cuenta la cantidad de accidentes por día de la semana
+    # Se cuenta la cantidad_accidentes por día de la semana
     data = df.groupby("nombre_dia").agg({"num_victimas": "sum"}).reset_index()
 
     # Se crea el gráfico de barras
@@ -305,9 +305,9 @@ def cantidad_victimas_por_dia_semana(df):
         x="nombre_dia", y="num_victimas", data=data, order=dias_semana, hue="nombre_dia"
     )
 
-    ax.set_title("Cantidad de Accidentes por Día de la Semana")
+    ax.set_title("Cantidad accidentes por día de la semana")
     ax.set_xlabel("Día de la Semana")
-    ax.set_ylabel("Cantidad de Accidentes")
+    ax.set_ylabel("Cantidad accidentes")
     plt.xticks(rotation=45)
 
     # Se muestran datos resumen
@@ -349,11 +349,11 @@ def crea_categoria_momento_dia(hora):
 
 def cantidad_accidentes_por_categoria_tiempo(df):
     """
-    Calcula la cantidad de accidentes por categoría de tiempo y muestra un gráfico de barras.
+    Calcula la cantidad_accidentes por categoría de tiempo y muestra un gráfico de barras.
 
     Esta función toma un DataFrame que contiene una columna 'hora' y utiliza la función
     'crea_categoria_momento_dia' para crear la columna 'categoria_tiempo'. Luego, cuenta
-    la cantidad de accidentes por cada categoría de tiempo, calcula los porcentajes y
+    la cantidad_accidentes por cada categoría de tiempo, calcula los porcentajes y
     genera un gráfico de barras que muestra la distribución de accidentes por categoría de tiempo.
 
     Parameters:
@@ -365,7 +365,7 @@ def cantidad_accidentes_por_categoria_tiempo(df):
     # Se aplica la función crea_categoria_momento_dia para crear la columna 'categoria_tiempo'
     df["categoria_tiempo"] = df["hora"].apply(crea_categoria_momento_dia)
 
-    # Se cuenta la cantidad de accidentes por categoría de tiempo
+    # Se cuenta la cantidad_accidentes por categoría de tiempo
     data = df["categoria_tiempo"].value_counts().reset_index()
     data.columns = ["categoria_tiempo", "cantidad_accidentes"]
 
@@ -379,9 +379,9 @@ def cantidad_accidentes_por_categoria_tiempo(df):
         x="categoria_tiempo", y="cantidad_accidentes", data=data, hue="categoria_tiempo"
     )
 
-    ax.set_title("Cantidad de Accidentes por Categoría de Tiempo")
+    ax.set_title("Cantidad accidentes por categoría de tiempo")
     ax.set_xlabel("Categoría de Tiempo")
-    ax.set_ylabel("Cantidad de Accidentes")
+    ax.set_ylabel("Cantidad accidentes")
 
     # Se agrega las cantidades en las barras
     for index, row in data.iterrows():
@@ -398,7 +398,7 @@ def cantidad_accidentes_por_categoria_tiempo(df):
 
 def cantidad_accidentes_por_horas_del_dia(df):
     """
-    Genera un gráfico de barras que muestra la cantidad de accidentes por hora del día.
+    Genera un gráfico de barras que muestra la cantidad_accidentes por hora_del_dia.
 
     Parameters:
         df: El conjunto de datos de accidentes.
@@ -406,29 +406,31 @@ def cantidad_accidentes_por_horas_del_dia(df):
     Returns:
         Un gráfico de barras.
     """
-    # Se extrae la hora del día de la columna 'hora'
-    df["hora del día"] = df["hora"].apply(lambda x: x.hour)
+    # Se extrae la hora_del_dia de la columna 'hora'
+    df["hora_del_dia"] = df["hora"].apply(lambda x: x.hour)
 
-    # Se cuenta la cantidad de accidentes por hora del día
-    data = df["hora del día"].value_counts().reset_index()
-    data.columns = ["hora del día", "Cantidad de accidentes"]
+    # Se cuenta la cantidad_accidentes por hora_del_dia
+    data = df["hora_del_dia"].value_counts().reset_index()
+    data.columns = ["hora_del_dia", "cantidad_accidentes"]
 
-    # Se ordena los datos por hora del día
-    data = data.sort_values(by="hora del día")
+    # Se ordena los datos por hora_del_dia
+    data = data.sort_values(by="hora_del_dia")
 
     # Se crea el gráfico de barras
-    plt.figure(figsize=(12, 4))
-    ax = sns.barplot(x="hora del día", y="Cantidad de accidentes", data=data)
+    plt.figure(figsize=(12, 5))
+    ax = sns.barplot(
+        x="hora_del_dia", y="cantidad_accidentes", data=data, hue="cantidad_accidentes"
+    )
 
-    ax.set_title("Cantidad de Accidentes por hora del Día")
-    ax.set_xlabel("hora del día")
-    ax.set_ylabel("Cantidad de accidentes")
+    ax.set_title("Cantidad accidentes por hora del día")
+    ax.set_xlabel("Hora del día")
+    ax.set_ylabel("Cantidad accidentes")
 
     # Se agrega las cantidades en las barras
     for index, row in data.iterrows():
         ax.annotate(
-            f'{row["Cantidad de accidentes"]}',
-            (row["hora del día"], row["Cantidad de accidentes"]),
+            f'{row["cantidad_accidentes"]}',
+            (row["hora_del_dia"], row["cantidad_accidentes"]),
             ha="center",
             va="bottom",
         )
@@ -439,7 +441,7 @@ def cantidad_accidentes_por_horas_del_dia(df):
 
 def cantidad_accidentes_semana_fin_de_semana(df):
     """
-    Genera un gráfico de barras que muestra la cantidad de accidentes por tipo de día (semana o fin de semana).
+    Genera un gráfico de barras que muestra la cantidad_accidentes por tipo_dia (semana o fin_semana).
 
     Parameters:
         df: El conjunto de datos de accidentes.
@@ -451,30 +453,30 @@ def cantidad_accidentes_semana_fin_de_semana(df):
     df["fecha"] = pd.to_datetime(df["fecha"])
 
     # Se extrae el día de la semana (0 = lunes, 6 = domingo)
-    df["Dia semana"] = df["fecha"].dt.dayofweek
+    df["dia_semana"] = df["fecha"].dt.dayofweek
 
-    # Se crea una columna 'tipo_dia' para diferenciar entre semana y fin de semana
-    df["Tipo de día"] = df["Dia semana"].apply(
-        lambda x: "Fin de Semana" if x >= 5 else "Semana"
+    # Se crea una columna 'tipo_dia' para diferenciar entre semana y fin_semana
+    df["tipo_dia"] = df["dia_semana"].apply(
+        lambda x: "fin_semana" if x >= 5 else "Semana"
     )
 
-    # Se cuenta la cantidad de accidentes por tipo de día
-    data = df["Tipo de día"].value_counts().reset_index()
-    data.columns = ["Tipo de día", "Cantidad de accidentes"]
+    # Se cuenta la cantidad_accidentes por tipo_dia
+    data = df["tipo_dia"].value_counts().reset_index()
+    data.columns = ["tipo_dia", "cantidad_accidentes"]
 
     # Se crea el gráfico de barras
     plt.figure(figsize=(6, 4))
-    ax = sns.barplot(x="Tipo de día", y="Cantidad de accidentes", data=data)
+    ax = sns.barplot(x="tipo_dia", y="cantidad_accidentes", data=data, hue="tipo_dia")
 
-    ax.set_title("Cantidad de accidentes por tipo de día")
+    ax.set_title("Cantidad accidentes por tipo de día")
     ax.set_xlabel("Tipo de día")
     ax.set_ylabel("Cantidad de accidentes")
 
     # Se agrega las cantidades en las barras
     for index, row in data.iterrows():
         ax.annotate(
-            f'{row["Cantidad de accidentes"]}',
-            (index, row["Cantidad de accidentes"]),
+            f'{row["cantidad_accidentes"]}',
+            (index, row["cantidad_accidentes"]),
             ha="center",
             va="bottom",
         )
@@ -497,14 +499,14 @@ def distribucion_edad(df):
     fig, ax = plt.subplots(2, 1, figsize=(12, 6), sharex=True)
 
     # Se grafica el histograma de la edad
-    sns.histplot(df["Edad"], kde=True, ax=ax[0])
-    ax[0].set_title("Histograma de Edad")
+    sns.histplot(df["edad"], kde=True, ax=ax[0])
+    ax[0].set_title("Histograma de edad")
     ax[0].set_ylabel("Frecuencia")
 
     # Se grafica el boxplot de la edad
-    sns.boxplot(x=df["Edad"], ax=ax[1])
-    ax[1].set_title("Boxplot de Edad")
-    ax[1].set_xlabel("Edad")
+    sns.boxplot(x=df["edad"], ax=ax[1])
+    ax[1].set_title("Boxplot de edad")
+    ax[1].set_xlabel("edad")
 
     # Se ajusta y muestra el gráfico
     plt.tight_layout()
@@ -523,11 +525,11 @@ def distribucion_edad_por_anio(df):
     """
     # Se crea el gráfico de boxplot
     plt.figure(figsize=(12, 6))
-    sns.boxplot(x="Año", y="Edad", data=df)
+    sns.boxplot(x="Año", y="edad", data=df)
 
-    plt.title("Boxplot de Edades de Víctimas por Año")
+    plt.title("Boxplot de edades de Víctimas por Año")
     plt.xlabel("Año")
-    plt.ylabel("Edad de las Víctimas")
+    plt.ylabel("edad de las Víctimas")
 
     # Se muestra el gráfico
     plt.show()
@@ -535,7 +537,7 @@ def distribucion_edad_por_anio(df):
 
 def cantidades_accidentes_por_anio_y_sexo(df):
     """
-    Genera un gráfico de barras que muestra la cantidad de accidentes por año y sexo.
+    Genera un gráfico de barras que muestra la cantidad_accidentes por año y sexo.
 
     Parameters:
         df: El conjunto de datos de accidentes.
@@ -546,13 +548,13 @@ def cantidades_accidentes_por_anio_y_sexo(df):
     # Se crea el gráfico de barras
     plt.figure(figsize=(12, 4))
     sns.barplot(
-        x="Año",
-        y="Edad",
-        hue="Sexo",
+        x="anio",
+        y="edad",
+        hue="sexo",
         data=df,
     )
 
-    plt.title("Cantidad de Accidentes por Año y Sexo")
+    plt.title("Cantidad de accidentes por año y sexo")
     plt.xlabel("Año")
     plt.ylabel("Edad de las víctimas")
     plt.legend(title="Sexo")
@@ -596,8 +598,8 @@ def cohen_por_año(df):
     cohen_lista = []
     # Se itera por los años y se guarda Cohen para cada grupo
     for a in años_unicos:
-        grupo1 = df[((df["Sexo"] == "MASCULINO") & (df["Año"] == a))]["Edad"]
-        grupo2 = df[((df["Sexo"] == "FEMENINO") & (df["Año"] == a))]["Edad"]
+        grupo1 = df[((df["Sexo"] == "MASCULINO") & (df["Año"] == a))]["edad"]
+        grupo2 = df[((df["Sexo"] == "FEMENINO") & (df["Año"] == a))]["edad"]
         d = cohen(grupo1, grupo2)
         cohen_lista.append(d)
 
@@ -628,8 +630,8 @@ def edad_y_rol_victimas(df):
         None
     """
     plt.figure(figsize=(8, 4))
-    sns.boxplot(y="Rol", x="Edad", data=df)
-    plt.title("Edades por Condición")
+    sns.boxplot(y="Rol", x="edad", data=df)
+    plt.title("edades por Condición")
     plt.show()
 
 
@@ -645,22 +647,22 @@ def distribucion_edad_por_victima(df):
     """
     # Se crea el gráfico de boxplot
     plt.figure(figsize=(14, 6))
-    sns.boxplot(x="Víctima", y="Edad", data=df)
+    sns.boxplot(x="Víctima", y="edad", data=df)
 
-    plt.title("Boxplot de Edades de Víctimas por tipo de vehículo que usaba")
+    plt.title("Boxplot de edades de Víctimas por tipo de vehículo que usaba")
     plt.xlabel("Tipo de vehiculo")
-    plt.ylabel("Edad de las Víctimas")
+    plt.ylabel("edad de las Víctimas")
 
     plt.show()
 
 
 def cantidad_accidentes_sexo(df):
     """
-    Genera un resumen de la cantidad de accidentes por sexo de los conductores.
+    Genera un resumen de la cantidad_accidentes por sexo de los conductores.
 
     Esta función toma un DataFrame como entrada y genera un resumen que incluye:
 
-    * Un gráfico de barras que muestra la cantidad de accidentes por sexo de los conductores en orden descendente.
+    * Un gráfico de barras que muestra la cantidad_accidentes por sexo de los conductores en orden descendente.
     * Un DataFrame que muestra la cantidad y el porcentaje de accidentes por sexo de los conductores.
 
     Parameters:
@@ -673,30 +675,30 @@ def cantidad_accidentes_sexo(df):
     df["fecha"] = pd.to_datetime(df["fecha"])
 
     # Se extrae el día de la semana (0 = lunes, 6 = domingo)
-    df["Dia semana"] = df["fecha"].dt.dayofweek
+    df["dia_semana"] = df["fecha"].dt.dayofweek
 
-    # Se crea una columna 'tipo_dia' para diferenciar entre semana y fin de semana
-    df["Tipo de día"] = df["Dia semana"].apply(
-        lambda x: "Fin de Semana" if x >= 5 else "Semana"
+    # Se crea una columna 'tipo_dia' para diferenciar entre semana y fin_semana
+    df["tipo_dia"] = df["dia_semana"].apply(
+        lambda x: "fin_semana" if x >= 5 else "Semana"
     )
 
-    # Se cuenta la cantidad de accidentes por tipo de día
-    data = df["Tipo de día"].value_counts().reset_index()
-    data.columns = ["Tipo de día", "Cantidad de accidentes"]
+    # Se cuenta la cantidad_accidentes por tipo_dia
+    data = df["tipo_dia"].value_counts().reset_index()
+    data.columns = ["tipo_dia", "cantidad_accidentes"]
 
     # Se crea el gráfico de barras
     plt.figure(figsize=(6, 4))
-    ax = sns.barplot(x="Tipo de día", y="Cantidad de accidentes", data=data)
+    ax = sns.barplot(x="tipo_dia", y="cantidad_accidentes", data=data)
 
-    ax.set_title("Cantidad de accidentes por tipo de día")
-    ax.set_xlabel("Tipo de día")
-    ax.set_ylabel("Cantidad de accidentes")
+    ax.set_title("cantidad_accidentes por tipo_dia")
+    ax.set_xlabel("tipo_dia")
+    ax.set_ylabel("cantidad_accidentes")
 
     # Se agrega las cantidades en las barras
     for index, row in data.iterrows():
         ax.annotate(
-            f'{row["Cantidad de accidentes"]}',
-            (index, row["Cantidad de accidentes"]),
+            f'{row["cantidad_accidentes"]}',
+            (index, row["cantidad_accidentes"]),
             ha="center",
             va="bottom",
         )
@@ -724,7 +726,7 @@ def cantidad_victimas_sexo_rol_victima(df):
     fig, axes = plt.subplots(1, 3, figsize=(15, 4))
 
     # Gráfico 1: Sexo
-    sns.countplot(data=df, x="Sexo", ax=axes[0])
+    sns.countplot(data=df, x="sexo", ax=axes[0], hue="sexo")
     axes[0].set_title("Cantidad de víctimas por sexo")
     axes[0].set_ylabel("Cantidad de víctimas")
 
@@ -733,7 +735,7 @@ def cantidad_victimas_sexo_rol_victima(df):
     colores_invertidos = [colores_por_defecto[1], colores_por_defecto[0]]
 
     # Gráfico 2: Rol
-    df_rol = df.groupby(["Rol", "Sexo"]).size().unstack(fill_value=0)
+    df_rol = df.groupby(["rol", "sexo"]).size().unstack(fill_value=0)
     df_rol.plot(kind="bar", stacked=True, ax=axes[1], color=colores_invertidos)
     axes[1].set_title("Cantidad de víctimas por rol")
     axes[1].set_ylabel("Cantidad de víctimas")
@@ -741,7 +743,7 @@ def cantidad_victimas_sexo_rol_victima(df):
     axes[1].legend().set_visible(False)
 
     # Gráfico 3: Tipo de vehículo
-    df_victima = df.groupby(["Víctima", "Sexo"]).size().unstack(fill_value=0)
+    df_victima = df.groupby(["victima", "sexo"]).size().unstack(fill_value=0)
     df_victima.plot(kind="bar", stacked=True, ax=axes[2], color=colores_invertidos)
     axes[2].set_title("Cantidad de víctimas por tipo de vehículo")
     axes[2].set_ylabel("Cantidad de víctimas")
@@ -825,15 +827,19 @@ def cantidad_victimas_participantes(df):
         None
     """
     # Se ordenan los datos por 'Participantes' en orden descendente por cantidad
-    ordenado = df["Participantes"].value_counts().reset_index()
-    ordenado = ordenado.rename(columns={"Cantidad": "participantes"})
+    ordenado = df["participantes"].value_counts().reset_index()
+    ordenado = ordenado.rename(columns={"cantidad": "participantes"})
     ordenado = ordenado.sort_values(by="count", ascending=False)
 
     plt.figure(figsize=(15, 4))
 
     # Se crea el gráfico de barras
     ax = sns.barplot(
-        data=ordenado, x="Participantes", y="count", order=ordenado["Participantes"]
+        data=ordenado.head(15),
+        x="participantes",
+        y="count",
+        order=ordenado["participantes"].head(15),
+        hue="participantes",
     )
     ax.set_title("Cantidad de víctimas por participantes")
     ax.set_ylabel("Cantidad de víctimas")
@@ -875,14 +881,16 @@ def cantidad_acusados(df):
         None
     """
     # Se ordenan los datos por 'Participantes' en orden descendente por cantidad
-    ordenado = df["Acusado"].value_counts().reset_index()
-    ordenado = ordenado.rename(columns={"Cantidad": "Acusado"})
+    ordenado = df["acusado"].value_counts().reset_index()
+    ordenado = ordenado.rename(columns={"Cantidad": "acusado"})
     ordenado = ordenado.sort_values(by="count", ascending=False)
 
     plt.figure(figsize=(15, 4))
 
     # Crear el gráfico de barras
-    ax = sns.barplot(data=ordenado, x="Acusado", y="count", order=ordenado["Acusado"])
+    ax = sns.barplot(
+        data=ordenado, x="acusado", y="count", order=ordenado["acusado"], hue="acusado"
+    )
     ax.set_title("Cantidad de acusados en los hechos")
     ax.set_ylabel("Cantidad de acusados")
     ax.set_xticklabels(ax.get_xticklabels(), rotation=45, horizontalalignment="right")
@@ -891,8 +899,8 @@ def cantidad_acusados(df):
     plt.show()
 
     # # Se calcula la cantidad de acusados
-    # acusados_counts = df['Acusado'].value_counts().reset_index()
-    # acusados_counts.columns = ['Acusado', 'Cantidad de acusados']
+    # acusados_counts = df['acusado'].value_counts().reset_index()
+    # acusados_counts.columns = ['acusado', 'Cantidad de acusados']
 
     # # Se calcula el porcentaje de acusados
     # total_acusados = acusados_counts['Cantidad de acusados'].sum()
@@ -925,11 +933,11 @@ def accidentes_tipo_de_calle(df):
     # Se crea el gráfico
     fig, axes = plt.subplots(1, 2, figsize=(10, 4))
 
-    sns.countplot(data=df, x="Tipo de calle", ax=axes[0])
+    sns.countplot(data=df, x="tipo_calle", ax=axes[0], hue="tipo_calle")
     axes[0].set_title("Cantidad de víctimas por tipo de calle")
     axes[0].set_ylabel("Cantidad de víctimas")
 
-    sns.countplot(data=df, x="Cruce", ax=axes[1])
+    sns.countplot(data=df, x="cruce", ax=axes[1], hue="tipo_calle")
     axes[1].set_title("Cantidad de víctimas en cruces")
     axes[1].set_ylabel("Cantidad de víctimas")
 
