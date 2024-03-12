@@ -109,7 +109,7 @@ def imputa_valor_frecuente(df, columna):
     df[columna].fillna(valor_mas_frecuente, inplace=True)
 
 
-def imputa_edad_media_segun_sexo(df):
+def imputa_edad_media_segun_sexo(df, col, agr):
     """
     Imputa valores faltantes en la columna 'Edad' utilizando la edad promedio según el género.
 
@@ -126,23 +126,21 @@ def imputa_edad_media_segun_sexo(df):
     """
 
     # Se reemplaza "SD" con NaN en la columna 'edad'
-    df["Edad"] = df["Edad"].replace("SD", pd.NA)
+    df[col] = df[col].replace("SD", pd.NA)
 
     # Se calcula el promedio de edad para cada grupo de género
-    promedio_por_genero = df.groupby("Sexo")["Edad"].mean()
+    promedio_por_genero = df.groupby(agr)[col].mean()
     print(
         f'La edad promedio de Femenino es {round(promedio_por_genero["FEMENINO"])} y de Masculino es {round(promedio_por_genero["MASCULINO"])}'
     )
 
     # Se llenan los valores NaN en la columna 'edad' utilizando el promedio correspondiente al género
-    df["Edad"] = df.apply(
-        lambda row: (
-            promedio_por_genero[row["Sexo"]] if pd.isna(row["Edad"]) else row["Edad"]
-        ),
+    df[col] = df.apply(
+        lambda row: (promedio_por_genero[row[agr]] if pd.isna(row[col]) else row[col]),
         axis=1,
     )
     # Lo convierte a entero
-    df["Edad"] = df["Edad"].astype(int)
+    df[col] = df[col].astype(int)
 
 
 def verificar_tipo_datos_y_nulos(df):
