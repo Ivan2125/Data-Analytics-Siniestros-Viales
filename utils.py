@@ -231,7 +231,7 @@ def accidentes_mensuales(df, col_anio, col_mes):
     plt.show()
 
 
-def cantidad_victimas_mensuales(df):
+def cantidad_victimas_mensuales(df, col_mes):
     """
     Crea un gráfico de barras que muestra la cantidad de víctimas de accidentes por mes.
 
@@ -246,11 +246,11 @@ def cantidad_victimas_mensuales(df):
         None
     """
     # Se agrupa por la cantidad de víctimas por mes
-    data = df.groupby("Mes").agg({"Cantidad víctimas": "sum"}).reset_index()
+    data = df.groupby(col_mes).agg({"num_victimas": "sum"}).reset_index()
 
     # Se grafica
     plt.figure(figsize=(6, 4))
-    ax = sns.barplot(x="Mes", y="Cantidad víctimas", data=data)
+    ax = sns.barplot(x=col_mes, y="num_victimas", data=data)
     ax.set_title("Cantidad de víctimas por Mes")
     ax.set_xlabel("Mes")
     ax.set_ylabel("Cantidad de Accidentes")
@@ -297,13 +297,11 @@ def cantidad_victimas_por_dia_semana(df):
     df["Nombre día"] = df["Día semana"].map(lambda x: dias_semana[x])
 
     # Se cuenta la cantidad de accidentes por día de la semana
-    data = df.groupby("Nombre día").agg({"Cantidad víctimas": "sum"}).reset_index()
+    data = df.groupby("Nombre día").agg({"num_victimas": "sum"}).reset_index()
 
     # Se crea el gráfico de barras
     plt.figure(figsize=(6, 3))
-    ax = sns.barplot(
-        x="Nombre día", y="Cantidad víctimas", data=data, order=dias_semana
-    )
+    ax = sns.barplot(x="Nombre día", y="num_victimas", data=data, order=dias_semana)
 
     ax.set_title("Cantidad de Accidentes por Día de la Semana")
     ax.set_xlabel("Día de la Semana")
