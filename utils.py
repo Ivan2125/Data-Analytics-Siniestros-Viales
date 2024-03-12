@@ -184,7 +184,7 @@ def verificar_tipo_datos_y_nulos(df):
     return df_info.sort_values(ascending=False, by="nulos_%")
 
 
-def accidentes_mensuales(df):
+def accidentes_mensuales(df, col_anio, col_mes):
     """
     Crea gráficos de línea para la cantidad de víctimas de accidentes mensuales por año.
 
@@ -199,7 +199,7 @@ def accidentes_mensuales(df):
         None
     """
     # Se obtiene una lista de años únicos
-    años = df["Año"].unique()
+    años = df[col_anio].unique()
 
     # Se define el número de filas y columnas para la cuadrícula de subgráficos
     n_filas = 3
@@ -215,7 +215,7 @@ def accidentes_mensuales(df):
 
         # Se filtran los datos para el año actual y agrupa por mes
         data_mensual = (
-            df[df["Año"] == year].groupby("Mes").agg({"Cantidad víctimas": "sum"})
+            df[df[col_anio] == year].groupby(col_mes).agg({"num_victimas": "sum"})
         )
 
         # Se configura el subgráfico actual
@@ -957,3 +957,63 @@ def accidentes_tipo_de_calle(df):
     # print(df_tipo_calle)
     # print("\nResumen por Cruce:")
     # print(df_cruce)
+
+
+def graficos_eda_categoricos(cat):
+    """
+    Realiza gráficos de barras horizontales para explorar datos categóricos.
+
+    Parámetros:
+    - cat (DataFrame): DataFrame que contiene variables categóricas a visualizar.
+
+    Retorna:
+    - None: La función solo genera gráficos y no devuelve valores.
+
+    La función toma un DataFrame con variables categóricas y genera gráficos de barras horizontales
+    para visualizar la distribución de categorías en cada variable. Los gráficos se organizan en
+    filas y columnas para facilitar la visualización.
+    """
+    # Calculamos el número de filas que necesitamos
+    from math import ceil
+
+    filas = ceil(cat.shape[1] / 2)
+
+    # Definimos el gráfico
+    f, ax = plt.subplots(nrows=filas, ncols=2, figsize=(16, filas * 6))
+
+    # Aplanamos para iterar por el gráfico como si fuera de 1 dimensión en lugar de 2
+    ax = ax.flat
+
+    # Creamos el bucle que va añadiendo gráficos
+    for cada, variable in enumerate(cat):
+        cat[variable].value_counts().plot.barh(ax=ax[cada])
+        ax[cada].set_title(variable, fontsize=12, fontweight="bold")
+        ax[cada].tick_params(labelsize=12)
+
+
+def estadisticos_cont(num):
+    """
+    Calcula estadísticas descriptivas para variables numéricas.
+
+    Parámetros:
+    - num (DataFrame o Series): Datos numéricos para los cuales se desean calcular estadísticas.
+
+    Retorna:
+    - DataFrame: Un DataFrame que contiene estadísticas descriptivas, incluyendo la media, la desviación estándar,
+      los percentiles, el mínimo, el máximo y la mediana.
+
+    La función toma datos numéricos y calcula estadísticas descriptivas, incluyendo la media, desviación estándar,
+    percentiles (25%, 50%, 75%), mínimo, máximo y mediana. Los resultados se presentan en un DataFrame organizado
+    para una fácil interpretación.
+
+    Nota:
+    - El DataFrame de entrada debe contener solo variables numéricas para obtener resultados significativos.
+    """
+    # Calculamos describe
+    estadisticos = num.describe().T
+    # Añadimos la mediana
+    estadisticos["median"] = num.median()
+    # Reordenamos para que la mediana esté al lado de la media
+    estadisticos = estadisticos.iloc[:, [0, 1, 8, 2, 3, 4, 5, 6, 7]]
+    # Lo devolvemos
+    return estadisticos
